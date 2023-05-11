@@ -99,9 +99,26 @@ main .container .section-title {
   width: 110px;
   object-fit: cover;
   overflow: hidden;
+  transform: translateY(0);
+  transition: transform 0.3s ease;
 }
+
+#chefs .chef-avt:hover {
+  outline: 3px solid #000;
+  transform: translateY(-10%);
+  transition: all 0.3s ease;
+}
+
 #chefs .chef .chef-name {
   font-weight: 600;
   font-size: 14px;
   margin-top: 10px;
+}
+
+.btn-next,
+.btn-prev {
+  color: #fff;
+  font-size: 20px;
+  background-color: #000;
+  border-radius: 50%;
 }

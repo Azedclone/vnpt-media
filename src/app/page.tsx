@@ -3,11 +3,21 @@ import Image from "next/image";
 import "./home.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { Place, Chef } from "@/models";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
 
 export default function Home() {
+  const settings = {
+    slidesPerRow: 10,
+    autoplay: true,
+    arrow: false,
+  };
+  const slider = useRef<Slider>(null);
+
   // State chứa các places fetch từ API
   const [places, setPlaces] = useState<Place[]>();
   const [chefs, setChefs] = useState<Chef[]>();
@@ -81,20 +91,38 @@ export default function Home() {
 
       <section id="chefs">
         {chefs && (
-          <div className="grid grid-cols-10 gap-5 container">
-            {chefs.map((chef) => (
-              <Link key={chef.userId} href="/" className="chef">
-                <Image
-                  className="chef-avt rounded-full"
-                  src={chef.avatar?.cdnOrigin!}
-                  alt="Avatar_Chef"
-                  width={150}
-                  height={75}
-                ></Image>
-                <p className="chef-name">{chef.displayName}</p>
-              </Link>
-            ))}
-          </div>
+          <>
+            <Slider
+              ref={slider}
+              className="grid grid-cols-10 gap-5 container"
+              {...settings}
+            >
+              {chefs.map((chef) => (
+                <Link key={chef.userId} href="/" className="chef">
+                  <Image
+                    className="chef-avt rounded-full"
+                    src={chef.avatar?.cdnOrigin!}
+                    alt="Avatar_Chef"
+                    width={150}
+                    height={75}
+                  ></Image>
+                  <p className="chef-name">{chef.displayName}</p>
+                </Link>
+              ))}
+            </Slider>
+            <button
+              className="btn-prev"
+              onClick={() => slider?.current?.slickPrev()}
+            >
+              {"<"}
+            </button>
+            <button
+              className="btn-next"
+              onClick={() => slider?.current?.slickNext()}
+            >
+              {">"}
+            </button>
+          </>
         )}
       </section>
       <div className="container">
@@ -116,14 +144,6 @@ export default function Home() {
               ))}
             </div>
           )}
-
-          {/* {places && (
-            <ul>
-              {places.map((item) => (
-                <li key={item.id}>{item.placeLevel?.address}</li>
-              ))}
-            </ul>
-          )} */}
         </div>
       </div>
     </main>
